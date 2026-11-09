@@ -1,37 +1,27 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
-import time
+import io
+
 class screener_data:
     @staticmethod
     def copy_table_data(driver, wait):
         try:
-            # Wait for table body to load
-            table = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'table tbody')))
-            rows = table.find_elements(By.TAG_NAME, 'tr')
-            print(f"📄 Found {len(rows)} rows in table.")
-
-            # Get column headers
-            headers = driver.find_elements(By.CSS_SELECTOR, 'table thead tr th')
-            header_names = [header.text.strip() for header in headers if header.text.strip() != '']
-
-            print(f"🧾 Headers detected: {header_names}")
-
-            data = []
-            for row in rows:
-                cells = row.find_elements(By.TAG_NAME, 'td')
-                row_data = [cell.text.strip() for cell in cells if cell.text.strip() != '']
-
-                if len(row_data) != len(header_names):
-                    print(f"⚠️ Skipping row due to mismatch: {row_data}")
-                    continue
-
-                data.append(dict(zip(header_names, row_data)))
-
-            df = pd.DataFrame(data)
-            print("✅ Table data extracted successfully.")
+            table_elem = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'table.data-table, table')))
+            table_html = table_elem.get_attribute('outerHTML')
+            
+            dfs = pd.read_html(io.StringIO(table_html))
+            if not dfs:
+                return None
+                
+            df = dfs[0]
+            # Strip index artifacts and unnamed headers
+            df = df.loc[:, ~df.columns.str.contains('^Unnamed|^S\\.No')]
+            
+            if 'Name' in df.columns:
+                df['Name'] = df['Name'].astype(str).str.strip()
+                
             return df
-
         except Exception as e:
-            print(f"❌ Failed to extract table data:\n{e}")
+            print(f"❌ Failed to extract table data: {e}")
             return None
