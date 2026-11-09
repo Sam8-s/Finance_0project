@@ -9,15 +9,18 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException,
 import time
 import pandas as pd
 from edit_column import edit_column
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class screener_0:
-    USERNAME = "d.samyu2626@gmail.com"
-    PASSWORD = "samyuktha08"
-    EDGEDRIVER_PATH = r"C:\edgedriver_win64\msedgedriver.exe"
-    # STOCK_SYMBOL_TO_NAME = {
-    #     "TATAMOTORS": "Tata Motors",
-    #     "IRFC": "Indian Railway Finance"
-    # }
+    USERNAME = os.getenv("USERNAME")
+    PASSWORD = os.getenv("PASSWORD")
+    EDGEDRIVER_PATH = os.getenv("EDGEDRIVER_PATH")
+
+    if not USERNAME or not PASSWORD or not EDGEDRIVER_PATH:
+        raise ValueError("Username or password is missing. Check your .env file.")
 
     def __init__(self):
         self.options = EdgeOptions()
