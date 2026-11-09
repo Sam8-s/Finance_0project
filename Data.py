@@ -1,15 +1,7 @@
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
 class job_data:
-    USERNAME = os.getenv("USERNAME")
-    PASSWORD = os.getenv("PASSWORD")
-    EDGEDRIVER_PATH = os.getenv("EDGEDRIVER_PATH")
-    if not USERNAME or not PASSWORD or not EDGEDRIVER_PATH:
-        raise ValueError("Email or password is missing. Check your .env file.")
-    
+    # USERNAME = "d.samyu2626@gmail.com"
+    # PASSWORD = "ammu2006"
+    # CHROMEDRIVER_PATH = r"C:\edgedriver_win64\msedgedriver.exe"
     List_comp = ["ABB","ABCAPITAL","ABFRL","ACC","ADANIENT","ADANIENSOL","ADANIGREEN","ADANIPORTS","ADANIPOWER","ALKEM","AMBUJACEM"
                  ,"APOLLOHOSP","APOLLOTYRE","APLAPOLLO","ASHOKLEY","ASIANPAINT","ASTRAL","ATGL","AUROPHARMA","AUBANK","AXISBANK",
                  "BAJAJ-AUTO","BAJAJFINSV","BAJFINANCE","BAJAJHFL","BAJAJHLDNG","BANDHANBNK","BANKBARODA","BANKINDIA","BDL","BEL",
